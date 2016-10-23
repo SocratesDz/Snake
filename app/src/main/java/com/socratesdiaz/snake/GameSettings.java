@@ -34,4 +34,7 @@ public final class GameSettings {
     public static final int SWIPE_THRESH_HOLD = 100;
     public static final int SWIPE_VELOCITY_THRESH_HOLD = 100;
     public static final int LAYOUT_PADDING = 0;
+    public static final int START_NEW_ACTIVITY_DURATION = 200;
+
+    public static final String PREFS_NAME = "SnakePreferences";
 }
