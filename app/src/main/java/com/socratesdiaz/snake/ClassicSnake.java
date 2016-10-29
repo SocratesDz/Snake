@@ -66,6 +66,9 @@ public class ClassicSnake extends AppCompatActivity {
 
     private TextView textScore;
 
+    private int speedX = 17;
+    private int speedY = 17;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -385,6 +388,67 @@ public class ClassicSnake extends AppCompatActivity {
                                     }
                                 }
                                 isCollide = false;
+                                if(isGoingRight || clickRight) {
+                                    for(int i = parts.size() -1; i>=0; i--) {
+                                        ImageView imageView = parts.get(i);
+                                        if(i>0) {
+                                            ImageView imageView1 = parts.get(i-1);
+                                            imageView.setX(imageView1.getX());
+                                            imageView.setY(imageView1.getY());
+                                        } else {
+                                            imageView.setX(imageView.getX() + speedX);
+                                            if(imageView.getX() + imageView.getWidth() >= screenWidth) {
+                                                imageView.setX(screenWidth - imageView.getWidth() / 2);
+                                                collide();
+                                            }
+                                        }
+                                    }
+                                } else if(isGoingLeft || clickLeft) {
+                                    for (int i = parts.size()-1; i >= 0; i--) {
+                                        ImageView imageView = parts.get(i);
+                                        if(i>=0) {
+                                            ImageView imageView2 = parts.get(i);
+                                            imageView.setX(imageView2.getX());
+                                            imageView.setY(imageView2.getY());
+                                        } else {
+                                            imageView.setX(imageView.getX()-speedX);
+                                            if(imageView.getX() <= 0) {
+                                                imageView.setX(0);
+                                                collide();
+                                            }
+                                        }
+                                    }
+                                } else if(isGoingDown || clickDown) {
+                                    for (int i = parts.size()-1; i >= 0; i--) {
+                                        ImageView imageView = parts.get(i);
+                                        if(i>0) {
+                                            ImageView imageView2 = parts.get(i-1);
+                                            imageView.setX(imageView2.getX());
+                                            imageView.setY(imageView2.getY());
+                                        } else {
+                                            imageView.setY(imageView.getY() + speedY);
+                                            if((imageView.getY() + imageView.getHeight() >= screenHeight)) {
+                                                imageView.setY(screenHeight - imageView.getHeight()/2);
+                                                collide();
+                                            }
+                                        }
+                                    }
+                                } else if(isGoingUp || clickUp) {
+                                    for (int i = parts.size()-1; i >= 0; i--) {
+                                        ImageView imageView = parts.get(i);
+                                        if(i>0) {
+                                            ImageView imageView2 = parts.get(i-1);
+                                            imageView.setX(imageView2.getX());
+                                            imageView.setY(imageView2.getY());
+                                        } else {
+                                            imageView.setY(imageView.getY() - speedY);
+                                            if(imageView.getY() <= 0) {
+                                                imageView.setY(0);
+                                                collide();
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         });
                     } catch (InterruptedException e) {
