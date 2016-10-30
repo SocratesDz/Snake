@@ -13,7 +13,7 @@ public final class GameSettings {
 
     public static final int POINTS_ANIMATION = 4;
 
-    public static final int POISON_FOOD = 5;
+    public static final int NUMBER_BOMBS = 5;
 
     public static final String MY_AD_UNIT_ID = "TBA";
 
@@ -34,6 +34,8 @@ public final class GameSettings {
     public static final int SWIPE_THRESH_HOLD = 100;
     public static final int SWIPE_VELOCITY_THRESH_HOLD = 100;
     public static final int LAYOUT_PADDING = 0;
+    public static final int LAYOUT_MARGIN = 0;
+
     public static final int START_NEW_ACTIVITY_DURATION = 200;
 
     public static final String PREFS_NAME = "SnakePreferences";

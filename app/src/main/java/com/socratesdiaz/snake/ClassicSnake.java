@@ -3,10 +3,13 @@ package com.socratesdiaz.snake;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,7 +23,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.logging.Handler;
 
 
 public class ClassicSnake extends AppCompatActivity {
@@ -139,22 +141,22 @@ public class ClassicSnake extends AppCompatActivity {
             changeDirection(DIRECTION.DOWN);
     }
 
-    private void onClickLeft() {
+    private void clickLeft() {
         if(!clickLeft && !clickRight)
             changeDirection(DIRECTION.LEFT);
     }
 
-    private void onClickRight() {
+    private void clickRight() {
         if(!clickLeft && !clickRight)
             changeDirection(DIRECTION.RIGHT);
     }
 
-    private void onClickUp() {
+    private void clickUp() {
         if(!clickUp && !clickDown)
             changeDirection(DIRECTION.UP);
     }
 
-    private void onClickDown() {
+    private void clickDown() {
         if(!clickUp && !clickDown)
             changeDirection(DIRECTION.DOWN);
     }
@@ -195,28 +197,28 @@ public class ClassicSnake extends AppCompatActivity {
         btnUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onClickUp();
+                clickUp();
             }
         });
 
         btnRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onClickRight();
+                clickRight();
             }
         });
 
         btnLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onClickLeft();
+                clickLeft();
             }
         });
 
         btnDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onClickDown();
+                clickDown();
             }
         });
 
@@ -287,7 +289,7 @@ public class ClassicSnake extends AppCompatActivity {
 
     private void checkBitten() {
         ImageView snakeHead = parts.get(0);
-        ImageView snakeTile = new ImageView(this);
+        ImageView snakeTile;
 
         for (int i = 1; i < parts.size(); i++) {
             snakeTile = parts.get(i);
@@ -299,13 +301,13 @@ public class ClassicSnake extends AppCompatActivity {
     }
 
     private void addTail() {
-        RelativeLayout snakeLayout = (RelativeLayout) findViewById(R.id.snake_layout);
+        //RelativeLayout snakeLayout = (RelativeLayout) findViewById(R.id.snake_layout);
         ImageView imageView = new ImageView(this);
         imageView.setImageResource(R.drawable.head);
         LinearLayout.LayoutParams layoutParams = new
                 LinearLayout.LayoutParams(((screenWidth * 20) / 450), ((screenHeight * 30) / 450));
         imageView.setLayoutParams(layoutParams);
-        snakeLayout.addView(imageView);
+        classicSnakeLayout.addView(imageView);
         parts.add(imageView);
     }
 
@@ -389,12 +391,12 @@ public class ClassicSnake extends AppCompatActivity {
                                 }
                                 isCollide = false;
                                 if(isGoingRight || clickRight) {
-                                    for(int i = parts.size() -1; i>=0; i--) {
+                                    for(int i = parts.size() - 1; i>=0; i--) {
                                         ImageView imageView = parts.get(i);
-                                        if(i>0) {
-                                            ImageView imageView1 = parts.get(i-1);
-                                            imageView.setX(imageView1.getX());
-                                            imageView.setY(imageView1.getY());
+                                        if(i > 0) {
+                                            ImageView imageView2 = parts.get(i - 1);
+                                            imageView.setX(imageView2.getX());
+                                            imageView.setY(imageView2.getY());
                                         } else {
                                             imageView.setX(imageView.getX() + speedX);
                                             if(imageView.getX() + imageView.getWidth() >= screenWidth) {
@@ -404,14 +406,14 @@ public class ClassicSnake extends AppCompatActivity {
                                         }
                                     }
                                 } else if(isGoingLeft || clickLeft) {
-                                    for (int i = parts.size()-1; i >= 0; i--) {
+                                    for (int i = parts.size() - 1; i >= 0; i--) {
                                         ImageView imageView = parts.get(i);
-                                        if(i>=0) {
-                                            ImageView imageView2 = parts.get(i);
+                                        if(i > 0) {
+                                            ImageView imageView2 = parts.get(i - 1);
                                             imageView.setX(imageView2.getX());
                                             imageView.setY(imageView2.getY());
                                         } else {
-                                            imageView.setX(imageView.getX()-speedX);
+                                            imageView.setX(imageView.getX() - speedX);
                                             if(imageView.getX() <= 0) {
                                                 imageView.setX(0);
                                                 collide();
@@ -421,8 +423,8 @@ public class ClassicSnake extends AppCompatActivity {
                                 } else if(isGoingDown || clickDown) {
                                     for (int i = parts.size()-1; i >= 0; i--) {
                                         ImageView imageView = parts.get(i);
-                                        if(i>0) {
-                                            ImageView imageView2 = parts.get(i-1);
+                                        if(i > 0) {
+                                            ImageView imageView2 = parts.get(i - 1);
                                             imageView.setX(imageView2.getX());
                                             imageView.setY(imageView2.getY());
                                         } else {
@@ -436,8 +438,8 @@ public class ClassicSnake extends AppCompatActivity {
                                 } else if(isGoingUp || clickUp) {
                                     for (int i = parts.size()-1; i >= 0; i--) {
                                         ImageView imageView = parts.get(i);
-                                        if(i>0) {
-                                            ImageView imageView2 = parts.get(i-1);
+                                        if(i > 0) {
+                                            ImageView imageView2 = parts.get(i - 1);
                                             imageView.setX(imageView2.getX());
                                             imageView.setY(imageView2.getY());
                                         } else {
@@ -459,4 +461,91 @@ public class ClassicSnake extends AppCompatActivity {
         }).start();
     }
 
+    public class SwipeGestureDetector extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            boolean result = false;
+
+            if(!useButtons) {
+                try {
+                    float diffX = e2.getX() - e1.getX();
+                    float diffY = e2.getY() - e1.getY();
+                    if(Math.abs(diffX) > Math.abs(diffY)) {
+                        // Horizontal swipe
+                        if(Math.abs(diffX) > GameSettings.SWIPE_THRESH_HOLD
+                                && Math.abs(velocityX) > GameSettings.SWIPE_VELOCITY_THRESH_HOLD) {
+                            if(diffX > 0) {
+                                onSwipeRight();
+                            } else {
+                                onSwipeLeft();
+                            }
+                            result = true;
+                        }
+                    } else if(Math.abs(diffY) > GameSettings.SWIPE_THRESH_HOLD
+                            && Math.abs(velocityY) > GameSettings.SWIPE_VELOCITY_THRESH_HOLD) {
+                        // Vertical swipe
+                        if(diffY > 0) {
+                            onSwipeDown();
+                        } else {
+                            onSwipeUp();
+                        }
+                        result = true;
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return result;
+        }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if(!isInitialized) {
+            isInitialized = true;
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            screenWidth = size.x;
+            screenHeight = size.y;
+            mHandler = new Handler();
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            mGestureDetector = new GestureDetector(null, new SwipeGestureDetector());
+            head = new ImageView(this);
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                    ((screenWidth * 20) / 450), ((screenHeight * 30) / 450)
+            );
+            head.setImageResource(R.drawable.head);
+            head.setLayoutParams(layoutParams);
+            head.setX(screenWidth / 2 - head.getWidth());
+            head.setY(screenHeight / 2 - head.getHeight());
+            classicSnakeLayout.addView(head);
+
+            parts = new ArrayList<>();
+            points = new ArrayList<>();
+            parts.add(0, head);
+
+            layoutParams.setMargins(GameSettings.LAYOUT_MARGIN,
+                    GameSettings.LAYOUT_MARGIN,
+                    GameSettings.LAYOUT_MARGIN,
+                    GameSettings.LAYOUT_MARGIN);
+
+            setFoodPoints();
+            buttonsDirectionInit();
+            if(hasFocus) {
+                isPaused = false;
+                update();
+            }
+            super.onWindowFocusChanged(hasFocus);
+        }
+    }
 }
