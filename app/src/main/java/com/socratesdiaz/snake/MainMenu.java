@@ -293,4 +293,9 @@ public class MainMenu extends AppCompatActivity {
 
         settingsBtn.startAnimation(compileAnim);
     }
+
+    @Override
+    public void onBackPressed() {
+
+    }
 }

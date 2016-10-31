@@ -13,7 +13,12 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 
 public class NoWallsScore extends AppCompatActivity {
     private TextView scoreTextView;
@@ -26,6 +31,8 @@ public class NoWallsScore extends AppCompatActivity {
     private TextView mGameOverTitleRightTextView;
     private TextView mGameOverTitleMiddleTextView;
 
+    private AdView mAdView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +42,15 @@ public class NoWallsScore extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
         if(getSupportActionBar() != null)
             getSupportActionBar().hide();
+
+        RelativeLayout noWallsScoreLayout = (RelativeLayout) findViewById(R.id.no_walls_score_layout);
+        mAdView = new AdView(this);
+        mAdView.setAdSize(AdSize.SMART_BANNER);
+        mAdView.setAdUnitId(GameSettings.MY_AD_UNIT_ID);
+        noWallsScoreLayout.addView(mAdView);
+
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
+        mAdView.loadAd(adRequest);
 
         initTitle();
         initScore();
@@ -58,7 +74,7 @@ public class NoWallsScore extends AppCompatActivity {
                 SharedPreferences preferences = getApplicationContext().getSharedPreferences(
                         GameSettings.PREFS_NAME, Context.MODE_PRIVATE
                 );
-                int playerScore = preferences.getInt("Score", 0);
+                int playerScore = preferences.getInt(GameSettings.PLAYER_SCORE, 0);
                 scoreTextView.setText("Score: " + String.valueOf(playerScore));
                 scoreTextView.setTextColor(Color.WHITE);
                 scoreTextView.setGravity(Gravity.CENTER);
@@ -102,10 +118,10 @@ public class NoWallsScore extends AppCompatActivity {
                 GameSettings.PREFS_NAME, Context.MODE_PRIVATE
         );
         SharedPreferences.Editor editor = preferences.edit();
-        int highScore = preferences.getInt("HighScoreNoWalls", 0);
-        int lastScore = preferences.getInt("Score", 0);
+        int highScore = preferences.getInt(GameSettings.HIGH_SCORE_NOWALLS, 0);
+        int lastScore = preferences.getInt(GameSettings.PLAYER_SCORE, 0);
         if(lastScore > highScore) {
-            editor.putInt("HighScoreNoWalls", lastScore);
+            editor.putInt(GameSettings.HIGH_SCORE_NOWALLS, lastScore);
             editor.apply();
             highScore = lastScore;
         }
@@ -237,6 +253,11 @@ public class NoWallsScore extends AppCompatActivity {
         animationTitleMiddle.setDuration(GameSettings.ANIMATION_HIDE_TITLE_DURATION);
         mGameOverTitleMiddleTextView.startAnimation(animationTitleMiddle);
 
+
+    }
+
+    @Override
+    public void onBackPressed() {
 
     }
 }
